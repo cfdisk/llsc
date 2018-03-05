@@ -1,4 +1,4 @@
-!/bin/sh
+#!/bin/sh
 
 # scan directory and interactivly delete oldest file while below threshold
 
