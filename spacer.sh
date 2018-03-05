@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# scan directory and interactivly delete oldest file while below df threshold
+# scan directory and interactivly delete oldest file while below threshold
 
-THRESHOLD=10000000
+THRESHOLD=1000000000
 DATADIR=/mnt/hdd/movie/
 
 ##############################################################################
@@ -23,10 +23,11 @@ getOldestFile() {
 while [ `checkFree` -le "$THRESHOLD" ]; do
     echo "######################################################"
     echo "Media ($DATADIR) almost full: Free: `checkFree` / Threshold: $THRESHOLD"
-    echo "Oldest File: $DATADIR`getOldestFile`"
-    
-    rm -i $DATADIR/`getOldestFile`
-    #mv $DATADIR/`getOldestFile` /mnt/hdd/tmp
+    _oldestFile=`getOldestFile`
+    echo "Oldest File: $DATADIR$_oldestFile"
+    touch "$DATADIR/$_oldestFile"
+    rm -i "$DATADIR/$_oldestFile"
+    #mv $DATADIR/$_oldestFile /mnt/hdd/tmp
     sleep 1
 done
 
