@@ -2,35 +2,35 @@
 
 # scan directory and interactivly delete oldest file while below threshold
 
-THRESHOLD=1000000000
-DATADIR=/mnt/hdd/movie/
+threshold=1000000000
+datadir=/tmp
 
 ##############################################################################
 
-checkFree() {
+checkfree() {
     sync
-    freeSpace=`df $DATADIR | tail -n 1`
-    freeSpace=`echo $freeSpace | awk -F " " '{print $4}'`
-    echo $freeSpace
+    freespace=$( df $datadir | tail -n 1 )
+    freespace=$( echo $freespace | awk -F " " '{print $4}' )
+    echo "$freespace"
 }
 
-getOldestFile() {
-    oldestFile="$(find $DATADIR/ -type f -printf '%p\n' | sort | head -n 1)"
-    #oldestFile="$(ls -1t $DATADIR | tail -1)"
-    echo $oldestFile
+getoldestfile() {
+    oldestfile="$(find $datadir/ -type f -printf '%p\n' | sort | head -n 1)"
+    #oldestfile="$(ls -1t $datadir | tail -1)"
+    echo "$oldestFile"
 }
 
-while [ `checkFree` -le "$THRESHOLD" ]; do
+while [ `checkfree` -le "$threshold" ]; do
     echo "######################################################"
-    echo "Media ($DATADIR) almost full: Free: `checkFree` / Threshold: $THRESHOLD"
-    _oldestFile=`getOldestFile`
-    echo "Oldest File: $DATADIR$_oldestFile"
-    touch "$DATADIR/$_oldestFile"
-    rm -i "$DATADIR/$_oldestFile"
-    #mv $DATADIR/$_oldestFile /mnt/hdd/tmp
+    echo "Media ($datadir) below threshold (Free: $(checkfree) / threshold: $threshold)"
+    oldestfile=`getoldestfile`
+    echo "Oldest File: $datadir$oldestfile"
+#    rm -i "$datadir/$oldestfile"
+#    touch "$datadir/$oldestfile" 2&1>/dev/null
+    #mv $datadir/$oldestfile /mnt/hdd/tmp
     sleep 1
 done
 
-echo "Media ($DATADIR) Free: `checkFree` / Threshold: $THRESHOLD"
+echo "Media ($datadir) Free: `checkfree` / threshold: $threshold"
 
 exit 0

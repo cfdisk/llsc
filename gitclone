@@ -1,0 +1,28 @@
+#!/bin/sh
+
+if [ -z $1 ]; then
+    echo "Usage: $0 [<args>]" >&2
+    exit 1
+fi
+
+masterurl=${1%.*}
+masterurl="$masterurl/archive/master.tar.gz"
+masterfile="${masterurl##*/}"
+
+reponame=${1%.*}
+reponame=${reponame##*/}
+
+echo "Clone to $reponame ..."
+wget $masterurl -q
+retval=$?
+if [ $retval -ne 0 ]; then
+    echo "reposirory $masterurl not found"
+    exit $retval
+fi
+
+fcount=`tar xzfv $masterfile | wc -l`
+mv -f "$reponame-master" "$reponame"
+rm -f $masterfile
+echo "Unpacked objects: $fcount"
+
+exit 0
