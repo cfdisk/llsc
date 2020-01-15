@@ -9,3 +9,6 @@ detect current shell
 
 ## gitclone
 A git clone clone for systems without git
+
+## pipe.sh
+pipe into script example

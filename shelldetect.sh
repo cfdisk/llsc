@@ -6,7 +6,7 @@ detectShell() {
     # sh
     # busybox
     # ...
-    
+
     ps -p $PPID -ocomm=
     # or:
     ls -l /proc/$PPID/exe | sed 's%.*/%%'
